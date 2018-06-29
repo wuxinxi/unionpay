@@ -2,6 +2,7 @@ package com.wxx.unionpay;
 
 import android.app.Application;
 
+import com.wxx.unionpay.db.manager.DBCore;
 import com.wxx.unionpay.log.MLog;
 import com.wxx.unionpay.manager.IPosManager;
 import com.wxx.unionpay.manager.PosManager;
@@ -24,7 +25,7 @@ public class UnionPayApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-
+        DBCore.init(this);
         MLog.setDebug(true);
 
         posManager = new PosManager();

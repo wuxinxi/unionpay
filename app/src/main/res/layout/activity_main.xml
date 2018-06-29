@@ -3,12 +3,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.wxx.unionpay.MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/sign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="签到" />
+
+    <Button
+        android:id="@+id/query"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="参数查询" />
+
+    <Button
+        android:id="@+id/downAID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="下载AID" />
+
+    <Button
+        android:id="@+id/public_query"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="公钥查询" />
+
+    <Button
+        android:id="@+id/public_down"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="公钥下载" />
+
+    <Button
+        android:id="@+id/pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="消费" />
 
 </LinearLayout>

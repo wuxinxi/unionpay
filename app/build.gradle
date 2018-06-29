@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 26
@@ -17,6 +18,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    greendao {
+        schemaVersion
+        daoPackage 'com.wxx.unionpay.db.dao'
+        targetGenDir 'src/main/java'
+    }
 }
 
 dependencies {
@@ -30,4 +37,5 @@ dependencies {
     compile 'com.tonystark.android:socket:2.0.3'
     compile files('libs/commons-codec-1.9.jar')
     compile project(':java8583')
+    compile 'org.greenrobot:greendao:3.2.0'
 }

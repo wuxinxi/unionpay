@@ -16,6 +16,8 @@
 package com.szxb.java8583.quickstart.special;
 
 
+import android.util.Log;
+
 import com.szxb.java8583.field.Iso8583FieldType;
 import com.szxb.java8583.special.SpecialField;
 
@@ -31,7 +33,9 @@ public class SpecialField62 implements SpecialField {
 	
 	@Override
 	public Iso8583FieldType.FieldTypeValue forParse(Iso8583FieldType fieldType, String mti) {
-		if("0810".equals(mti)){
+		if("0810".equals(mti)||"0830".equals(mti)){
+			Log.d("SpecialField62",
+			    "forParse(SpecialField62.java:36)mti："+mti);
 			return Iso8583FieldType.FieldTypeValue.LLLVAR_BYTE_NUMERIC;
 		}else{
 			return fieldType.getFieldTypeValue();
@@ -40,7 +44,7 @@ public class SpecialField62 implements SpecialField {
 
 	@Override
 	public Iso8583FieldType.FieldTypeValue forGetBytes(Iso8583FieldType fieldType, String mti) {
-		if("0810".equals(mti)){
+		if("0810".equals(mti)||"0830".equals(mti)){
 			return Iso8583FieldType.FieldTypeValue.LLLVAR_BYTE_NUMERIC;
 		}else{
 			return fieldType.getFieldTypeValue();

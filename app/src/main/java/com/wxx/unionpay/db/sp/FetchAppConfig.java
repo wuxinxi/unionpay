@@ -42,4 +42,8 @@ public class FetchAppConfig {
     public static String getAidIndexList() {
         return (String) CommonSharedPreferences.get("aid_index_list", String.format("%016X", 0));
     }
+
+    public static String getPublicIndexList() {
+        return (String) CommonSharedPreferences.get("public_index_list", String.format("%016X", 0));
+    }
 }

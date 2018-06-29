@@ -1,6 +1,7 @@
 package com.wxx.test;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,19 +9,19 @@ import android.widget.Button;
 
 import com.szxb.java8583.core.Iso8583Message;
 import com.szxb.java8583.core.Iso8583MessageFactory;
-import com.szxb.java8583.field.Iso8583DataHeader;
-import com.szxb.java8583.field.Iso8583FieldType;
 import com.szxb.java8583.quickstart.SingletonFactory;
 import com.szxb.java8583.quickstart.special.SpecialField62;
+import com.wxx.test.module.Down;
+import com.wxx.test.module.PosTransaction;
+import com.wxx.test.module.Sign;
 import com.wxx.unionpay.R;
 import com.wxx.unionpay.UnionPayApp;
-import com.wxx.unionpay.field.Field_60;
+import com.wxx.unionpay.db.manager.DBManager;
 import com.wxx.unionpay.interfaces.OnCallback;
 import com.wxx.unionpay.log.MLog;
 import com.wxx.unionpay.socket.SocketUtil;
-import com.wxx.unionpay.util.HexUtil;
 
-import java.nio.charset.Charset;
+import static com.wxx.unionpay.util.HexUtil.bytesToHexString;
 
 /**
  * 作者：Tangren on 2018-06-28
@@ -29,8 +30,17 @@ import java.nio.charset.Charset;
  * TODO:一句话描述
  */
 
-public class TestActivity extends AppCompatActivity implements OnCallback {
+public class TestActivity extends AppCompatActivity implements OnCallback, View.OnClickListener {
     SocketUtil socket;
+    Button signButton;
+    Button queryButton;
+    Button downAIDButton;
+
+    Button public_query;
+    Button public_down;
+    Button payButton;
+
+    int id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,53 +48,19 @@ public class TestActivity extends AppCompatActivity implements OnCallback {
         setContentView(R.layout.activity_main);
         socket = new SocketUtil();
         socket.setCallback(this);
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                socket.setData(message().getBytes());
-                socket.exe();
-            }
-        });
-    }
+        signButton = findViewById(R.id.sign);
+        queryButton = findViewById(R.id.query);
+        downAIDButton = findViewById(R.id.downAID);
+        public_query = findViewById(R.id.public_query);
+        public_down = findViewById(R.id.public_down);
+        payButton = findViewById(R.id.pay);
 
-    public static Iso8583DataHeader dataHeader() {
-        //定义报文头数据格式
-        return new Iso8583DataHeader(
-                // tpdu		BCD编码，5个字节（10个字符长度）
-                new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 10),
-                // header	BCD编码，6个字节长度
-                new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 12),
-                // mti		BCD编码，2个字节长度
-                new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 4),
-                // bitmap	BCD编码，8个字节长度
-                new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 16)
-        );
-    }
-
-    public static Iso8583MessageFactory signFactory() {
-        Iso8583MessageFactory facotry = new Iso8583MessageFactory(2, false, Charset.forName("UTF-8"), dataHeader());
-        facotry.set(11, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 6))
-                .set(41, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 8))
-                .set(42, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 15))
-                .set(60, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLLVAR_NUMERIC, 0))
-                .set(63, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLLVAR_CHAR, 0));
-        return facotry;
-    }
-
-
-    public static Iso8583Message message() {
-        Iso8583Message message = new Iso8583Message(signFactory());
-        message.setTpdu("6003030000")
-                .setHeader("613100313031")
-                .setMti("0800")
-                .setValue(11, String.format("%06d", UnionPayApp.getPosManager().getTradeSeq()))
-                .setValue(41, UnionPayApp.getPosManager().getPosSn())
-                .setValue(42, UnionPayApp.getPosManager().getMchID())
-                .setValue(60, HexUtil.bytesToHexString(Field_60.sign_field_602()))
-                .setValue(63, "099");
-        MLog.d("message(TestActivity.java:84)" + message.getBytesString());
-        return message;
+        signButton.setOnClickListener(this);
+        queryButton.setOnClickListener(this);
+        downAIDButton.setOnClickListener(this);
+        public_query.setOnClickListener(this);
+        public_down.setOnClickListener(this);
+        payButton.setOnClickListener(this);
     }
 
 
@@ -94,7 +70,94 @@ public class TestActivity extends AppCompatActivity implements OnCallback {
         factory.setSpecialFieldHandle(62, new SpecialField62());
         Iso8583Message message0810 = factory.parse(data);
 
-        MLog.d("onCallBack(TestActivity.java:90)原始数据:" + HexUtil.bytesToHexString(data));
-        MLog.d("onCallBack(TestActivity.java:99)解析后的数据:"+ message0810.toFormatString());
+
+        MLog.d("onCallBack(TestActivity.java:90)原始数据:" + bytesToHexString(data));
+        MLog.d("onCallBack(TestActivity.java:99)解析后的数据:" + message0810.toFormatString());
+
+        if (id == R.id.sign) {
+            //签到返回
+            String batchNum = message0810.getValue(60).getValue().substring(2, 8);
+            UnionPayApp.getPosManager().setBatchNum(batchNum);
+            Sign.getInstance().setMacKey(message0810.getValue(62).getValue());
+        } else if (id == R.id.query) {
+            Down.getInstance().setParmaInfo(message0810.getValue(62).getValue());
+        } else if (id == R.id.downAID) {
+            DBManager.save_ic_params(message0810.getValue(62).getValue());
+        } else if (id == R.id.public_query) {
+            Down.getInstance().setQueryIndex(message0810.getValue(62).getValue());
+        } else if (id == R.id.public_down) {
+            DBManager.save_ic_public_key(message0810.getValue(62).getValue());
+        }
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.sign:
+                id = R.id.sign;
+                socket.setData(Sign.getInstance().message().getBytes());
+                socket.exe();
+                break;
+            case R.id.query:
+                id = R.id.query;
+                socket.setData(Down.getInstance().message().getBytes());
+                socket.exe();
+                break;
+            case R.id.downAID:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        id = R.id.downAID;
+                        String adiList = UnionPayApp.getPosManager().aidIndexList();
+                        MLog.d("onClick(TestActivity.java:91)" + adiList);
+                        String macs[] = adiList.split(",");
+                        for (String mac : macs) {
+                            socket.setData(Down.getInstance().messageAID(mac).getBytes());
+                            socket.exe();
+                            SystemClock.sleep(2000);
+                        }
+                        MLog.d("run(TestActivity.java:102)AID下载结束");
+                        id = 0;
+                        socket.setData(Down.getInstance().messageAIDEnd().getBytes());
+                        socket.exe();
+
+                    }
+                }).start();
+
+                break;
+            case R.id.public_query:
+                id = R.id.public_query;
+                socket.setData(Down.getInstance().messagePublicQuery().getBytes());
+                socket.exe();
+                break;
+            case R.id.public_down:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        id = R.id.public_down;
+                        String pubIndex = UnionPayApp.getPosManager().publicIndexList();
+                        MLog.d("onClick(TestActivity.java:91)" + pubIndex);
+                        String publics[] = pubIndex.split(",");
+                        for (String pub : publics) {
+                            socket.setData(Down.getInstance().messageDownPublic(pub).getBytes());
+                            socket.exe();
+                            SystemClock.sleep(2000);
+                        }
+                        MLog.d("run(TestActivity.java:102)公钥下载结束");
+                        id = 0;
+                        socket.setData(Down.getInstance().messageDownPublicEnd().getBytes());
+                        socket.exe();
+                    }
+                }).start();
+                break;
+            case R.id.pay:
+                socket.setData(PosTransaction.getInstance().payMessage("987654321","123456789").getBytes());
+                socket.exe();
+                break;
+            default:
+
+                break;
+        }
     }
 }

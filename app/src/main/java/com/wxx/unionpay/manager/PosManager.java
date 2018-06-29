@@ -2,7 +2,6 @@ package com.wxx.unionpay.manager;
 
 import com.wxx.unionpay.db.sp.CommonSharedPreferences;
 import com.wxx.unionpay.db.sp.FetchAppConfig;
-import com.wxx.unionpay.log.MLog;
 
 /**
  * 作者：Tangren on 2018-06-26
@@ -18,7 +17,8 @@ public class PosManager implements IPosManager {
     private String batchNum;
     private String operatorNumber;
     private String macKey;
-    private String aidList;
+    private String aidIndexList;
+    private String publicIndexList;
 
     @Override
     public void loadParams() {
@@ -27,17 +27,9 @@ public class PosManager implements IPosManager {
         batchNum = FetchAppConfig.batchNum();
         operatorNumber = FetchAppConfig.operatorNumber();
         macKey = FetchAppConfig.macKey();
-        aidList = FetchAppConfig.getAidIndexList();
-        
-       MLog.d("loadParams(PosManager.java:31)"+tradeSeq); 
-        
-        MLog.d("loadParams(PosManager.java:34)"+aidList);
-        
-        MLog.d("loadParams(PosManager.java:36)"+macKey);
-        
-        MLog.d("loadParams(PosManager.java:38)"+batchNum);
-        
-        MLog.d("loadParams(PosManager.java:40)");
+        aidIndexList = FetchAppConfig.getAidIndexList();
+        publicIndexList=FetchAppConfig.getPublicIndexList();
+
     }
 
     @Override
@@ -98,13 +90,24 @@ public class PosManager implements IPosManager {
 
     @Override
     public String aidIndexList() {
-        return aidList;
+        return aidIndexList;
     }
 
     @Override
     public void setAidIndexList(String list) {
-        this.aidList = list;
+        this.aidIndexList = list;
         CommonSharedPreferences.put("aid_index_list", list);
+    }
+
+    @Override
+    public String publicIndexList() {
+        return publicIndexList;
+    }
+
+    @Override
+    public void setpublicIndexList(String list) {
+        this.publicIndexList=list;
+        CommonSharedPreferences.put("public_index_list",list);
     }
 
 

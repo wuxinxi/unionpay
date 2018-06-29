@@ -43,5 +43,9 @@ public interface IPosManager {
 
     void setAidIndexList(String list);
 
+    String publicIndexList();
+
+    void setpublicIndexList(String list);
+
     void loadParams();
 }

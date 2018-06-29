@@ -38,6 +38,7 @@ public class SocketUtil {
             try {
                 socket = new Socket("183.237.71.61", 22102);
                 boolean connected = socket.isConnected();
+                socket.setSoTimeout(5000);
 
                 MLog.d("run(WorkThread.java:38)是否连接成功:" + connected);
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.wxx.unionpay.entity.bean.SignBean;
+import com.wxx.unionpay.entity.bean.StateBean;
 import com.wxx.unionpay.field.ComField;
 import com.wxx.unionpay.log.MLog;
 import com.wxx.unionpay.socket.SocketUtil;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button but = findViewById(R.id.button);
+        Button but = findViewById(R.id.sign);
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,12 +130,12 @@ public class MainActivity extends AppCompatActivity {
             dis.read(data);
 
             MLog.d("getNetWork(MainActivity.java:62)响应的数据:" + bytesToHexString(len) + bytesToHexString(data));
-//            StateBean sta=new StateBean(data);
+            StateBean sta=new StateBean(data);
 //            MLog.d("getNetWork(MainActivity.java:69)"+sta);
             SignBean signBean = new SignBean(data);
             if (signBean.getResCode().equals("00")) {
                 UnionPayApp.getPosManager().setBatchNum(signBean.getBatchNum());
-                MLog.d("getNetWork(MainActivity.java:70)签到成功，key=" + signBean.getPosKey());
+                MLog.d("getNetWork(MainActivity.java:70)签到成功，key=" + signBean.getPosKey()+",批次号:"+signBean.getBatchNum());
             }
             MLog.d("getNetWork(MainActivity.java:69)" + signBean);
 

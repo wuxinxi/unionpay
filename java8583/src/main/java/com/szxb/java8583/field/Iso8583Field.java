@@ -32,6 +32,7 @@ public final class Iso8583Field implements Comparable<Iso8583Field>{
 	 * 报文值
 	 */
 	private String value = "";
+
 	/**
 	 * 报文格式类型
 	 */

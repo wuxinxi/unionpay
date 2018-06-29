@@ -768,13 +768,11 @@ public class MacUtil {
 	 * 
 	 * @param key
 	 *            加密密钥32位16进制字符串
-	 * @param vector
-	 *            初始向量16位16进制字符串
 	 * @param data
 	 *            生成mac的原始数据的16进制表示
 	 * @return 最终生成mac的字符串
 	 */
-	public static String Mac_919(String key, String vector, String data) {
+	public static String Mac_919(String key, String data) {
 		if (key.length() != 32) {
 			new Exception("key of ansix9.19 must be 32").printStackTrace();
 			return null;
@@ -811,8 +809,8 @@ public class MacUtil {
 	/**
 	 * 对96为加密后的zpkzak串解码
 	 * 
-	 * @param 96位加密后zpkzak串
-	 * @param 主密钥
+	 * @param codesrc  96位加密后zpkzak串
+	 * @param key 主密钥
 	 * @return 64位16进制字符串，前32位为解密后的zpk，后32位为解密后的zak
 	 */
 	public static String zpkzakDecode(String codesrc, String key) {
