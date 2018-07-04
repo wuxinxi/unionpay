@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.wxx.unionpay.db.manager.DBCore;
 import com.wxx.unionpay.log.MLog;
-import com.wxx.unionpay.manager.IPosManager;
 import com.wxx.unionpay.manager.PosManager;
 import com.xuhao.android.libsocket.sdk.OkSocket;
 
@@ -19,7 +18,7 @@ public class UnionPayApp extends Application {
 
     private volatile static UnionPayApp instance;
 
-    private static IPosManager posManager;
+    private static PosManager posManager;
 
     @Override
     public void onCreate() {
@@ -38,7 +37,7 @@ public class UnionPayApp extends Application {
         return instance;
     }
 
-    public static IPosManager getPosManager() {
+    public static PosManager getPosManager() {
         if (posManager == null) {
             posManager = new PosManager();
         }

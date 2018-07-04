@@ -19,6 +19,7 @@ public class PosManager implements IPosManager {
     private String macKey;
     private String aidIndexList;
     private String publicIndexList;
+    private long lastUpdateTime;
 
     @Override
     public void loadParams() {
@@ -28,18 +29,23 @@ public class PosManager implements IPosManager {
         operatorNumber = FetchAppConfig.operatorNumber();
         macKey = FetchAppConfig.macKey();
         aidIndexList = FetchAppConfig.getAidIndexList();
-        publicIndexList=FetchAppConfig.getPublicIndexList();
+        publicIndexList = FetchAppConfig.getPublicIndexList();
+        lastUpdateTime = FetchAppConfig.getLastUpdateTime();
 
     }
 
     @Override
     public int getTradeSeq() {
+        return tradeSeq;
+    }
+
+    @Override
+    public void setTradeSeq() {
         if (tradeSeq >= 999999) {
             tradeSeq = 0;
         }
         tradeSeq += 1;
         CommonSharedPreferences.put("trade_seq", tradeSeq);
-        return tradeSeq;
     }
 
     @Override
@@ -106,8 +112,19 @@ public class PosManager implements IPosManager {
 
     @Override
     public void setpublicIndexList(String list) {
-        this.publicIndexList=list;
-        CommonSharedPreferences.put("public_index_list",list);
+        this.publicIndexList = list;
+        CommonSharedPreferences.put("public_index_list", list);
+    }
+
+    @Override
+    public void setCurrentUpdateTime(long date) {
+        this.lastUpdateTime = date;
+        CommonSharedPreferences.put("last_update_time", date);
+    }
+
+    @Override
+    public long getLastUpdateTime() {
+        return lastUpdateTime;
     }
 
 

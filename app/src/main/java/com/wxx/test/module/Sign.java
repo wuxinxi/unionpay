@@ -109,7 +109,7 @@ public class Sign {
             byte[] macCrc = new byte[4];
             arraycopy(crcdata, 0, macCrc, 0, macCrc.length);
             if (Arrays.equals(macCrc, macKeyCrc)) {
-                UnionPayApp.getPosManager().setMacKey(bytesToHexString(macKey));
+                UnionPayApp.getPosManager().setMacKey(macKeyHex);
                 MLog.d("setKey(SignBean.java:292)MAC正确");
 
             }

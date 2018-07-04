@@ -46,4 +46,8 @@ public class FetchAppConfig {
     public static String getPublicIndexList() {
         return (String) CommonSharedPreferences.get("public_index_list", String.format("%016X", 0));
     }
+
+    public static long getLastUpdateTime() {
+        return (Long) CommonSharedPreferences.get("last_update_time",0L);
+    }
 }

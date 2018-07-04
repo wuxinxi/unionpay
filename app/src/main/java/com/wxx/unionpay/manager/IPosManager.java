@@ -13,6 +13,8 @@ public interface IPosManager {
      */
     int getTradeSeq();
 
+    void setTradeSeq();
+
     /**
      * @return 获取设备SN号
      */
@@ -46,6 +48,10 @@ public interface IPosManager {
     String publicIndexList();
 
     void setpublicIndexList(String list);
+
+    void setCurrentUpdateTime(long date);
+
+    long getLastUpdateTime();
 
     void loadParams();
 }

@@ -37,9 +37,9 @@
         android:text="公钥下载" />
 
     <Button
-        android:id="@+id/pay"
+        android:id="@+id/rx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="消费" />
+        android:text="初始化" />
 
 </LinearLayout>

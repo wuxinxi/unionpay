@@ -94,7 +94,6 @@ public class HexUtil {
         return s;
     }
 
-
     /**
      * hex to int
      *
