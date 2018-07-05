@@ -170,7 +170,14 @@ public class TestActivity extends AppCompatActivity implements OnCallback, View.
                 }).start();
                 break;
             default:
-                exe();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        rxSocket.exeSSL(ExeType.SIGN,Sign.getInstance().message().getBytes());
+                    }
+                }).start();
+
                 break;
         }
     }

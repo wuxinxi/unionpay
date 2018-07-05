@@ -54,7 +54,7 @@ public class Down {
     //1. POS 状态上送报文 0820  POS 终端 IC 卡参数信息查询
     public Iso8583Message message() {
         Iso8583Message message = new Iso8583Message(signFactory());
-        message.setTpdu("6003030000")
+        message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0820")
                 .setValue(41, UnionPayApp.getPosManager().getPosSn())
@@ -68,7 +68,7 @@ public class Down {
     //1. POS POS 参数传递报文 0800 POS 终端 IC 卡参数下载
     public Iso8583Message messageAID(String tlvKey) {
         Iso8583Message message = new Iso8583Message(signFactory());
-        message.setTpdu("6003030000")
+        message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0800")
                 .setValue(41, UnionPayApp.getPosManager().getPosSn())
@@ -82,7 +82,7 @@ public class Down {
     //1. POS POS 参数传递报文 0800 POS 终端 IC 卡参数下载结束
     public Iso8583Message messageAIDEnd() {
         Iso8583Message message = new Iso8583Message(signFactory());
-        message.setTpdu("6003030000")
+        message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0800")
                 .setValue(41, UnionPayApp.getPosManager().getPosSn())
@@ -101,7 +101,7 @@ public class Down {
     //POS 终端 IC 卡公钥信息查询
     public Iso8583Message messagePublicQuery() {
         Iso8583Message message = new Iso8583Message(signFactory());
-        message.setTpdu("6003030000")
+        message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0820")
                 .setValue(41, UnionPayApp.getPosManager().getPosSn())
@@ -115,7 +115,7 @@ public class Down {
     //POS 终端 IC 卡公钥下载
     public Iso8583Message messageDownPublic(String tlvKey) {
         Iso8583Message message = new Iso8583Message(signFactory());
-        message.setTpdu("6003030000")
+        message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0800")
                 .setValue(41, UnionPayApp.getPosManager().getPosSn())
@@ -129,7 +129,7 @@ public class Down {
     //下载结束
     public Iso8583Message messageDownPublicEnd() {
         Iso8583Message message = new Iso8583Message(signFactory());
-        message.setTpdu("6003030000")
+        message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0800")
                 .setValue(41, UnionPayApp.getPosManager().getPosSn())

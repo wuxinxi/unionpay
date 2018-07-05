@@ -21,8 +21,16 @@ public class PosManager implements IPosManager {
     private String publicIndexList;
     private long lastUpdateTime;
 
+    private String ip;
+    private int port;
+    private String key;
+    private String posSN;
+    private String TPDU;
+
+    private boolean isSSL;
+
     @Override
-    public void loadParams() {
+    public void loadParams(boolean ssl) {
         tradeSeq = FetchAppConfig.tradeSeq();
         mch_id = FetchAppConfig.merchantNumber();
         batchNum = FetchAppConfig.batchNum();
@@ -32,6 +40,23 @@ public class PosManager implements IPosManager {
         publicIndexList = FetchAppConfig.getPublicIndexList();
         lastUpdateTime = FetchAppConfig.getLastUpdateTime();
 
+        if (ssl) {
+            ip = "120.204.69.139";
+            port = 30000;
+            key = "F870B9AD203B37F768863EDC8652E343";
+            mch_id = "438153341310001";
+            posSN = "37002321";
+            TPDU = "6005010000";
+            isSSL = true;
+        } else {
+            ip = "183.237.71.61";
+            port = 22102;
+            key = "9D0BDA257668DF8ADC4C5B856EA26298";
+            mch_id = "940411289996920";
+            posSN = "60941241";
+            TPDU = "6003030000";
+            isSSL = false;
+        }
     }
 
     @Override
@@ -49,16 +74,36 @@ public class PosManager implements IPosManager {
     }
 
     @Override
+    public String getIP() {
+        return ip;
+    }
+
+    @Override
+    public int getPort() {
+        return port;
+    }
+
+    @Override
+    public String getMchId() {
+        return mch_id;
+    }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
     public String getPosSn() {
-        String posSN = "60941241";
-        if (posSN.length() > 8) {
-            posSN = posSN.substring(0, 8);
-        } else if (posSN.length() < 8) {
-            int i = 8 - posSN.length();
-            for (int i1 = 0; i1 < i; i1++) {
-                posSN = posSN + "0";
-            }
-        }
+//        String posSN = "60941241";
+//        if (posSN.length() > 8) {
+//            posSN = posSN.substring(0, 8);
+//        } else if (posSN.length() < 8) {
+//            int i = 8 - posSN.length();
+//            for (int i1 = 0; i1 < i; i1++) {
+//                posSN = posSN + "0";
+//            }
+//        }
         return posSN;
     }
 
@@ -125,6 +170,16 @@ public class PosManager implements IPosManager {
     @Override
     public long getLastUpdateTime() {
         return lastUpdateTime;
+    }
+
+    @Override
+    public String getTPDU() {
+        return TPDU;
+    }
+
+    @Override
+    public boolean ISSSL() {
+        return isSSL;
     }
 
 

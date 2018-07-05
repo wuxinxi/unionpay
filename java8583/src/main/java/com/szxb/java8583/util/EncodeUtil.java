@@ -99,5 +99,25 @@ public class EncodeUtil {
 		}
 		return result;
 	}
+
+    /**
+     * 十六进制串转化为byte数组
+     *
+     * @return the array of byte
+     */
+    public static byte[] hex2byte(String hex)
+            throws IllegalArgumentException {
+        if (hex.length() % 2 != 0) {
+            throw new IllegalArgumentException();
+        }
+        char[] arr = hex.toCharArray();
+        byte[] b = new byte[hex.length() / 2];
+        for (int i = 0, j = 0, l = hex.length(); i < l; i++, j++) {
+            String swap = "" + arr[i++] + arr[i];
+            int byteint = Integer.parseInt(swap, 16) & 0xFF;
+            b[j] = Integer.valueOf(byteint).byteValue();
+        }
+        return b;
+    }
 	
 }

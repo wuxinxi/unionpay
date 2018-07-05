@@ -13,6 +13,7 @@ import com.wxx.unionpay.entity.bean.PassCode;
 import com.wxx.unionpay.log.MLog;
 import com.wxx.unionpay.socket.RxSocket;
 import com.wxx.unionpay.util.HexUtil;
+import com.wxx.unionpay.util.MyToast;
 import com.wxx.unionpay.util.TLV;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.Random;
 
 import static android.content.ContentValues.TAG;
+import static com.wxx.test.ExeType.PAY;
 import static com.wxx.unionpay.util.Utils.getCurrentDate;
 
 /**
@@ -130,6 +132,7 @@ class LoopThread extends Thread {
                     }
                 }
 
+                assert retStr != null;
                 if (!retStr[0].equalsIgnoreCase("9000")) {
                     MLog.d("run(LoopThread.java:134)-7");
                     return;
@@ -264,19 +267,37 @@ class LoopThread extends Thread {
 
             MLog.d("run(LoopThread.java:235)mackey=" + UnionPayApp.getPosManager().getMacKey());
 
-            byte[] exe = socket.exe(PosTransaction.getInstance().payMessage(mainCardNo, cardNum, cardData, tlv).getBytes());
-            Iso8583MessageFactory factory = SingletonFactory.forQuickStart();
-            factory.setSpecialFieldHandle(62, new SpecialField62());
-            Iso8583Message message0810 = factory.parse(exe);
+            byte[] bytes = PosTransaction.getInstance().payMessage(mainCardNo, cardNum, cardData, tlv).getBytes();
+            if (UnionPayApp.getPosManager().ISSSL()){
+                socket.exeSSL(PAY,bytes);
+            }else {
+                socketExe(bytes);
+            }
 
-            MLog.d("run(LoopThread.java:245)" + message0810.toFormatString());
-
-            MLog.d("run(LoopThread.java:235)" + HexUtil.bytesToHexString(exe));
 
         } catch (Exception e) {
             e.printStackTrace();
             MLog.d("run(LoopThread.java:258)哇哦……出现了异常,请及时处理>>>" + e.toString());
         }
+    }
+
+    private void socketExe(byte[]sendData) {
+        byte[] exe = socket.exe(sendData);
+        Iso8583MessageFactory factory = SingletonFactory.forQuickStart();
+        factory.setSpecialFieldHandle(62, new SpecialField62());
+        Iso8583Message message0810 = factory.parse(exe);
+
+        String resValue = message0810.getValue(39).getValue();
+        if (resValue.equals("00")) {
+            MyToast.showToast(UnionPayApp.getInstance().getApplicationContext(), "支付成功");
+        } else if (resValue.equals("51")) {
+            MyToast.showToast(UnionPayApp.getInstance().getApplicationContext(), "余额不足");
+        } else {
+            MyToast.showToast(UnionPayApp.getInstance().getApplicationContext(), "错误[" + resValue + "]");
+        }
+        MLog.d("run(LoopThread.java:245)" + message0810.toFormatString());
+
+        MLog.d("run(LoopThread.java:235)" + HexUtil.bytesToHexString(exe));
     }
 
     class TERM_INFO {

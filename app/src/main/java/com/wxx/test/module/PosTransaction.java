@@ -73,7 +73,7 @@ public class PosTransaction {
         System.arraycopy(dataAll, 2, data, 0, data.length);
 
         MLog.d("payMessage(PosTransaction.java:73)" + HexUtil.bytesToHexString(data));
-        iso8583Message.setTpdu("6003030000")
+        iso8583Message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setValue(64, pay_field_64(data));
 

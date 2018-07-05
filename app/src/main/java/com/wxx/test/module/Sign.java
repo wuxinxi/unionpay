@@ -55,7 +55,7 @@ public class Sign {
 
     public Iso8583Message message() {
         Iso8583Message message = new Iso8583Message(signFactory());
-        message.setTpdu("6003030000")
+        message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0800")
                 .setValue(11, String.format("%06d", UnionPayApp.getPosManager().getTradeSeq()))
@@ -97,7 +97,7 @@ public class Sign {
         arraycopy(field_60_data, i + macKey.length, macKeyCrc, 0, macKeyCrc.length);
         MLog.d("setKey(SignBean.java:268)Mac checkValue=" + bytesToHexString(macKeyCrc));
 
-        String key = "9D0BDA257668DF8ADC4C5B856EA26298";
+        String key = UnionPayApp.getPosManager().getKey();
         byte[] des = ThreeDes.Union3DesDecrypt(hex2byte(key), macKey);
 
         String macKeyHex = bytesToHexString(des);

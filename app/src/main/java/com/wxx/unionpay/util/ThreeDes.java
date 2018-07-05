@@ -88,9 +88,7 @@ public class ThreeDes {
         String f = DigestUtils.md5Hex(username + key);
         byte[] bkeys = new String(f).getBytes();
         byte[] enk = new byte[24];
-        for (int i = 0; i < 24; i++) {
-            enk[i] = bkeys[i];
-        }
+        System.arraycopy(bkeys, 0, enk, 0, 24);
         return enk;
     }
 

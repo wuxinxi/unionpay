@@ -15,6 +15,14 @@ public interface IPosManager {
 
     void setTradeSeq();
 
+    String getIP();
+
+    int getPort();
+
+    String getMchId();
+
+    String getKey();
+
     /**
      * @return 获取设备SN号
      */
@@ -53,5 +61,9 @@ public interface IPosManager {
 
     long getLastUpdateTime();
 
-    void loadParams();
+    String getTPDU();
+
+    boolean ISSSL();
+
+    void loadParams(boolean ssl);
 }
