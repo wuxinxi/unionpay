@@ -7,17 +7,25 @@ package com.szxb.java8583.module.manager;
  * TODO:
  */
 
-public interface IManager {
+public  interface IManager {
 
     void loadFromPrefs();
 
+    @Deprecated
     String getHost();
 
+    @Deprecated
     void setHost(String host);
 
+    @Deprecated
     int getPort();
 
+    @Deprecated
     void setPort(int port);
+
+    void setUnionPayUrl(String url);
+
+    String getUnionPayUrl();
 
     void setMachId(String mchId);
 
