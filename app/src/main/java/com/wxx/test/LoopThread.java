@@ -4,10 +4,11 @@ import android.util.Log;
 
 import com.szxb.java8583.core.Iso8583Message;
 import com.szxb.java8583.core.Iso8583MessageFactory;
+import com.szxb.java8583.module.BankPay;
+import com.szxb.java8583.module.BusCard;
 import com.szxb.java8583.quickstart.SingletonFactory;
 import com.szxb.java8583.quickstart.special.SpecialField62;
 import com.szxb.jni.libszxb;
-import com.wxx.test.module.PosTransaction;
 import com.wxx.unionpay.UnionPayApp;
 import com.wxx.unionpay.entity.bean.PassCode;
 import com.wxx.unionpay.log.MLog;
@@ -22,7 +23,6 @@ import java.util.Map;
 import java.util.Random;
 
 import static android.content.ContentValues.TAG;
-import static com.wxx.test.ExeType.PAY;
 import static com.wxx.unionpay.util.Utils.getCurrentDate;
 
 /**
@@ -32,7 +32,7 @@ import static com.wxx.unionpay.util.Utils.getCurrentDate;
  * TODO:一句话描述
  */
 
-class LoopThread extends Thread {
+public class LoopThread extends Thread {
 
     private String PSE = "00a404000e325041592E5359532E4444463031";
     List<String[]> listTLV;
@@ -54,6 +54,8 @@ class LoopThread extends Thread {
     public LoopThread(RxSocket socket) {
         this.socket = socket;
         init();
+        Log.d("LoopThread",
+            "LoopThread(LoopThread.java:58)lallaa");
     }
 
     @Override
@@ -63,9 +65,9 @@ class LoopThread extends Thread {
         try {
 
             byte[] cardType = new byte[5];
-            libszxb.RFID_setAnt(0);
-
-            libszxb.RFID_setAnt(1);
+//            libszxb.RFID_setAnt(0);
+//
+//            libszxb.RFID_setAnt(1);
 
             //寻卡
             String s = libszxb.MifareGetSNR(cardType);
@@ -267,12 +269,24 @@ class LoopThread extends Thread {
 
             MLog.d("run(LoopThread.java:235)mackey=" + UnionPayApp.getPosManager().getMacKey());
 
-            byte[] bytes = PosTransaction.getInstance().payMessage(mainCardNo, cardNum, cardData, tlv).getBytes();
-            if (UnionPayApp.getPosManager().ISSSL()){
-                socket.exeSSL(PAY,bytes);
-            }else {
-                socketExe(bytes);
-            }
+            BusCard busCard = new BusCard();
+            busCard.setMainCardNo(mainCardNo);
+            busCard.setCardNum(cardNum);
+            busCard.setMagTrackData(cardData);
+            busCard.setTlv55(tlv);
+            busCard.setMacKey(UnionPayApp.getPosManager().getMacKey());
+            busCard.setMoney(1);
+            busCard.setTradeSeq(UnionPayApp.getPosManager().getTradeSeq());
+            Iso8583Message iso8583Message = BankPay.getInstance().payMessage(busCard);
+            byte[] sendData = iso8583Message.getBytes();
+            socket.exeSSL(ExeType.PAY, sendData);
+
+//            byte[] bytes = PosTransaction.getInstance().payMessage(mainCardNo, cardNum, cardData, tlv).getBytes();
+//            if (UnionPayApp.getPosManager().ISSSL()){
+//                socket.exeSSL(PAY,bytes);
+//            }else {
+//                socketExe(bytes);
+//            }
 
 
         } catch (Exception e) {
@@ -281,7 +295,7 @@ class LoopThread extends Thread {
         }
     }
 
-    private void socketExe(byte[]sendData) {
+    private void socketExe(byte[] sendData) {
         byte[] exe = socket.exe(sendData);
         Iso8583MessageFactory factory = SingletonFactory.forQuickStart();
         factory.setSpecialFieldHandle(62, new SpecialField62());

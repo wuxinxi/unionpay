@@ -1,5 +1,9 @@
 package com.szxb.java8583.util;
 
+import java.io.ByteArrayOutputStream;
+
+import static java.lang.System.arraycopy;
+
 /**
  * <p>编码转换工具类.如:BCD和HEX</p>
  *
@@ -119,5 +123,95 @@ public class EncodeUtil {
         }
         return b;
     }
-	
+
+    /**
+     * byte 转hex
+     *
+     * @param src
+     * @return
+     */
+    public static String bytesToHexString(byte[] src) {
+        StringBuilder stringBuilder = new StringBuilder("");
+        if (src == null || src.length <= 0) {
+            return null;
+        }
+        for (byte aSrc : src) {
+            int v = aSrc & 0xFF;
+            String hv = Integer.toHexString(v);
+            if (hv.length() < 2) {
+                stringBuilder.append(0);
+            }
+            stringBuilder.append(hv);
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * 10进制串转为BCD码<br/>
+     *
+     * @param data 10进制串
+     * @return byte[] BCD码
+     */
+    public static byte[] str2Bcd(String data) {
+        return str2Bcd(data, 0);
+    }
+
+    public static byte[] str2Bcd(String data, int flag, int len) {
+        int dataLen = data.length();
+        if (dataLen < len) {
+            int addLen = len - dataLen;
+            for (int i = 0; i < addLen; i++) {
+                data = "0" + data;
+            }
+        }
+        return str2Bcd(data, flag);
+    }
+
+
+    /**
+     * 10进制串转为BCD码<br/>
+     *
+     * @param data 10进制串
+     * @param flag 0:默认左补0，1右补0
+     * @return
+     */
+    public static byte[] str2Bcd(String data, int flag) {
+        if (data.length() == 0) {
+            return new byte[0];
+        }
+
+        String str = data;
+        // 奇数个数字需左补零
+        if (str.length() % 2 != 0) {
+            str = flag == 0 ? "0" + str : str + "0";
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        char[] cs = str.toCharArray();
+        for (int i = 0; i < cs.length; i += 2) {
+            int high = cs[i] - 48;
+            int low = cs[i + 1] - 48;
+            baos.write(high << 4 | low);
+        }
+        return baos.toByteArray();
+    }
+
+
+    /**
+     * 合并byte数组
+     *
+     * @param datas .
+     * @return .
+     */
+    public static byte[] mergeByte(byte[]... datas) {
+        int length = 0;
+        byte[] endData = new byte[2048];
+        for (byte[] data : datas) {
+            arraycopy(data, 0, endData, length, data.length);
+            length += data.length;
+        }
+        byte[] data = new byte[length];
+        arraycopy(endData, 0, data, 0, length);
+        return data;
+    }
+
 }

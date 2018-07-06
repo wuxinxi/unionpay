@@ -1,14 +1,10 @@
 package com.wxx.test.module;
 
 import com.szxb.java8583.core.Iso8583Message;
-import com.szxb.java8583.core.Iso8583MessageFactory;
-import com.szxb.java8583.field.Iso8583FieldType;
 import com.wxx.unionpay.UnionPayApp;
 import com.wxx.unionpay.log.MLog;
 
-import java.nio.charset.Charset;
-
-import static com.wxx.test.base.Config.dataHeader;
+import static com.szxb.java8583.module.BaseFactory.downBaseParamFactory;
 import static com.wxx.unionpay.util.HexUtil.byteToString;
 import static com.wxx.unionpay.util.HexUtil.bytesToHexString;
 import static com.wxx.unionpay.util.HexUtil.hex2byte;
@@ -39,21 +35,11 @@ public class Down {
         }
         return instance;
     }
-
-
-    private Iso8583MessageFactory signFactory() {
-        Iso8583MessageFactory facotry = new Iso8583MessageFactory(2, false, Charset.forName("UTF-8"), dataHeader());
-        facotry.set(41, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 8))
-                .set(42, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 15))
-                .set(60, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLLVAR_NUMERIC, 0))
-                .set(62, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLLVAR_BYTE_NUMERIC, 0));//单独处理
-        return facotry;
-    }
-
+    
     /*-----------------------------------------IC 卡参数开始------------------------------------------------------*/
     //1. POS 状态上送报文 0820  POS 终端 IC 卡参数信息查询
     public Iso8583Message message() {
-        Iso8583Message message = new Iso8583Message(signFactory());
+        Iso8583Message message = new Iso8583Message(downBaseParamFactory());
         message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0820")
@@ -67,7 +53,7 @@ public class Down {
 
     //1. POS POS 参数传递报文 0800 POS 终端 IC 卡参数下载
     public Iso8583Message messageAID(String tlvKey) {
-        Iso8583Message message = new Iso8583Message(signFactory());
+        Iso8583Message message = new Iso8583Message(downBaseParamFactory());
         message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0800")
@@ -81,7 +67,7 @@ public class Down {
 
     //1. POS POS 参数传递报文 0800 POS 终端 IC 卡参数下载结束
     public Iso8583Message messageAIDEnd() {
-        Iso8583Message message = new Iso8583Message(signFactory());
+        Iso8583Message message = new Iso8583Message(downBaseParamFactory());
         message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0800")
@@ -100,7 +86,7 @@ public class Down {
 
     //POS 终端 IC 卡公钥信息查询
     public Iso8583Message messagePublicQuery() {
-        Iso8583Message message = new Iso8583Message(signFactory());
+        Iso8583Message message = new Iso8583Message(downBaseParamFactory());
         message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0820")
@@ -114,7 +100,7 @@ public class Down {
 
     //POS 终端 IC 卡公钥下载
     public Iso8583Message messageDownPublic(String tlvKey) {
-        Iso8583Message message = new Iso8583Message(signFactory());
+        Iso8583Message message = new Iso8583Message(downBaseParamFactory());
         message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0800")
@@ -128,7 +114,7 @@ public class Down {
 
     //下载结束
     public Iso8583Message messageDownPublicEnd() {
-        Iso8583Message message = new Iso8583Message(signFactory());
+        Iso8583Message message = new Iso8583Message(downBaseParamFactory());
         message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0800")

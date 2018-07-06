@@ -64,12 +64,12 @@ public class TestActivity extends AppCompatActivity implements OnCallback, View.
         socket = new SocketUtil();
         rxSocket = new RxSocket();
         socket.setCallback(this);
-        signButton = findViewById(R.id.sign);
-        queryButton = findViewById(R.id.query);
-        downAIDButton = findViewById(R.id.downAID);
-        public_query = findViewById(R.id.public_query);
-        public_down = findViewById(R.id.public_down);
-        rxButton = findViewById(R.id.rx);
+        signButton = (Button) findViewById(R.id.sign);
+        queryButton = (Button) findViewById(R.id.query);
+        downAIDButton = (Button) findViewById(R.id.downAID);
+        public_query = (Button) findViewById(R.id.public_query);
+        public_down = (Button) findViewById(R.id.public_down);
+        rxButton = (Button) findViewById(R.id.rx);
 
         signButton.setOnClickListener(this);
         queryButton.setOnClickListener(this);

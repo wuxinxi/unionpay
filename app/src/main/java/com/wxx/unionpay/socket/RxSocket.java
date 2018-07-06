@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.szxb.java8583.core.Iso8583Message;
 import com.szxb.java8583.core.Iso8583MessageFactory;
+import com.szxb.java8583.module.manager.BusllPosManage;
 import com.szxb.java8583.quickstart.SingletonFactory;
 import com.szxb.java8583.quickstart.special.SpecialField62;
 import com.wxx.test.ExeType;
@@ -93,11 +94,9 @@ public class RxSocket {
     }
 
     public byte[] exeSSL(final ExeType type, byte[] sendData) {
-
         if (sendData == null) {
             return null;
         }
-
         String url = "https://" + UnionPayApp.getPosManager().getIP() + ":" + UnionPayApp.getPosManager().getPort() + "/mjc/webtrans/VPB_lb";
         Request<byte[]> request = NoHttp.createByteArrayRequest(url, RequestMethod.POST);
         request.setHeader("User-Agent", "Donjin Http 0.1");
@@ -129,6 +128,7 @@ public class RxSocket {
                     if (type == ExeType.SIGN) {
                         String batchNum = message0810.getValue(60).getValue().substring(2, 8);
                         UnionPayApp.getPosManager().setBatchNum(batchNum);
+                        BusllPosManage.getPosManager().setBatchNum(batchNum);
                         Sign.getInstance().setMacKey(message0810.getValue(62).getValue());
                     }
                 }
@@ -139,7 +139,7 @@ public class RxSocket {
                             "fail(RxSocket.java:110)" + e);
 
                 }
-            });//  添加到请求队列，等待接受结果
+            });
         }
         return null;
     }
@@ -152,27 +152,4 @@ public class RxSocket {
         this.data = data;
     }
 
-
-    private static String construcHeadtMsg(byte[] sendData) {
-        // 报文体以 hex编码方式发送，+ 报文长度 2
-        int msgbodylength = sendData.length;
-//        String msgHead = "POST /mjc/webtrans/VPB_lb HTTP/1.1\r\n" + "HOST:%s:%s\r\n" + "User-Agent:Donjin Http 0.1\r\n" + "Cache-Control:no-cache\r\n" + "Content-Type:x-ISO-TPDU/x-auth\r\n" + "Accept:*/*\r\n" + "Content-Length:%s\r\n" + "\r\n";
-        String msgHead = "POST /mjc/webtrans/VPB_lb HTTP/1.1" + "HOST:%s:%s" + "User-Agent:Donjin Http 0.1" + "Cache-Control:no-cache" + "Content-Type:x-ISO-TPDU/x-auth" + "Accept:*/*" + "Content-Length:%s";
-        msgHead = String.format(msgHead, UnionPayApp.getPosManager().getIP(), UnionPayApp.getPosManager().getPort() + "", msgbodylength);
-        return msgHead;
-    }
-
-    private static byte[] constructMsg(byte[] sendData) {
-        String reqHead = construcHeadtMsg(sendData);
-        System.out.println("发送报文头===>" + reqHead);
-
-        int headlen = reqHead.getBytes().length;
-        MLog.d("constructMsg(RxSocket.java:216)headlen=" + headlen + "," + reqHead);
-
-        int len = headlen + sendData.length;
-        byte[] msgByteArray = new byte[len];
-        System.arraycopy(reqHead.getBytes(), 0, msgByteArray, 0, headlen);
-        System.arraycopy(sendData, 0, msgByteArray, headlen, sendData.length);
-        return msgByteArray;
-    }
 }

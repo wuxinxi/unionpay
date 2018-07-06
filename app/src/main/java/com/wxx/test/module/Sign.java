@@ -1,16 +1,14 @@
 package com.wxx.test.module;
 
 import com.szxb.java8583.core.Iso8583Message;
-import com.szxb.java8583.core.Iso8583MessageFactory;
-import com.szxb.java8583.field.Iso8583FieldType;
+import com.szxb.java8583.module.BaseFactory;
+import com.szxb.java8583.module.manager.BusllPosManage;
 import com.wxx.unionpay.UnionPayApp;
 import com.wxx.unionpay.log.MLog;
 import com.wxx.unionpay.util.ThreeDes;
 
-import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import static com.wxx.test.base.Config.dataHeader;
 import static com.wxx.unionpay.util.HexUtil.bytesToHexString;
 import static com.wxx.unionpay.util.HexUtil.hex2byte;
 import static com.wxx.unionpay.util.HexUtil.mergeByte;
@@ -42,19 +40,8 @@ public class Sign {
     }
 
 
-    private Iso8583MessageFactory signFactory() {
-        Iso8583MessageFactory facotry = new Iso8583MessageFactory(2, false, Charset.forName("UTF-8"), dataHeader());
-        facotry.set(11, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 6))
-                .set(41, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 8))
-                .set(42, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 15))
-                .set(60, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLLVAR_NUMERIC, 0))
-                .set(63, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLLVAR_CHAR, 0));
-        return facotry;
-    }
-
-
     public Iso8583Message message() {
-        Iso8583Message message = new Iso8583Message(signFactory());
+        Iso8583Message message = new Iso8583Message(BaseFactory.signInBaseFactory());
         message.setTpdu(UnionPayApp.getPosManager().getTPDU())
                 .setHeader("613100313031")
                 .setMti("0800")
@@ -110,6 +97,7 @@ public class Sign {
             arraycopy(crcdata, 0, macCrc, 0, macCrc.length);
             if (Arrays.equals(macCrc, macKeyCrc)) {
                 UnionPayApp.getPosManager().setMacKey(macKeyHex);
+                BusllPosManage.getPosManager().setMacKey(macKeyHex);
                 MLog.d("setKey(SignBean.java:292)MAC正确");
 
             }

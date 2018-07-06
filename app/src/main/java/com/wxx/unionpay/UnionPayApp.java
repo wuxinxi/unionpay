@@ -5,7 +5,6 @@ import android.app.Application;
 import com.wxx.unionpay.db.manager.DBCore;
 import com.wxx.unionpay.log.MLog;
 import com.wxx.unionpay.manager.PosManager;
-import com.xuhao.android.libsocket.sdk.OkSocket;
 import com.yanzhenjie.nohttp.InitializationConfig;
 import com.yanzhenjie.nohttp.Logger;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -33,8 +32,6 @@ public class UnionPayApp extends Application {
 
         posManager = new PosManager();
         posManager.loadParams(true);
-
-        OkSocket.initialize(this);
 
 
         NoHttp.initialize(InitializationConfig.newBuilder(this)

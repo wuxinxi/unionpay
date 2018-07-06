@@ -1,16 +1,12 @@
 package com.wxx.test.module;
 
 import com.szxb.java8583.core.Iso8583Message;
-import com.szxb.java8583.core.Iso8583MessageFactory;
-import com.szxb.java8583.field.Iso8583FieldType;
+import com.szxb.java8583.module.BaseFactory;
 import com.szxb.java8583.util.MacEcbUtils;
 import com.wxx.unionpay.UnionPayApp;
 import com.wxx.unionpay.log.MLog;
 import com.wxx.unionpay.util.HexUtil;
 
-import java.nio.charset.Charset;
-
-import static com.wxx.test.base.Config.dataHeader;
 import static com.wxx.unionpay.util.HexUtil.bytesToHexString;
 import static com.wxx.unionpay.util.HexUtil.mergeByte;
 import static com.wxx.unionpay.util.HexUtil.str2Bcd;
@@ -40,26 +36,6 @@ public class PosTransaction {
     }
 
 
-    private Iso8583MessageFactory payFactory() {
-        Iso8583MessageFactory facotry = new Iso8583MessageFactory(2, false, Charset.forName("UTF-8"), dataHeader());
-        facotry.set(2, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLVAR_NUMERIC, 0))
-                .set(3, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 6))
-                .set(4, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 12))
-                .set(11, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 6))
-                .set(22, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 3))
-                .set(23, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 4))
-                .set(25, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 2))
-                .set(35, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLVAR_NUMERIC, 0))
-                .set(41, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 8))
-                .set(42, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 15))
-                .set(49, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 3))
-                .set(53, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 16))
-                .set(55, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLLVAR_BYTE_NUMERIC, 0))
-                .set(60, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLLVAR_NUMERIC, 0))
-                .set(64, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 16));
-        return facotry;
-    }
-
     public Iso8583Message payMessage(String cardNo, String cardNum, String cardData, String tlv55) {
         int cardNumLen = cardNum.length();
         for (int i = 0; i < 4 - cardNumLen; i++) {
@@ -81,12 +57,12 @@ public class PosTransaction {
     }
 
 
-    public Iso8583Message payMessageData(String cardNo, String cardNum, String cardData, String tlv55) {
+    private Iso8583Message payMessageData(String cardNo, String cardNum, String cardData, String tlv55) {
         int cardNumLen = cardNum.length();
         for (int i = 0; i < 4 - cardNumLen; i++) {
             cardNum = "0" + cardNum;
         }
-        Iso8583Message message = new Iso8583Message(payFactory());
+        Iso8583Message message = new Iso8583Message(BaseFactory.payBaseFactory());
         message.setMti("0200")
                 .setValue(2, cardNo)//主账号
                 .setValue(3, "000000")//交易处理码
