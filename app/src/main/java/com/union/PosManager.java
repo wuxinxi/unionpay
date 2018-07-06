@@ -61,6 +61,16 @@ public class PosManager implements IManager {
     }
 
     @Override
+    public void setUnionPayUrl(String url) {
+
+    }
+
+    @Override
+    public String getUnionPayUrl() {
+        return null;
+    }
+
+    @Override
     public void setMachId(String mchId) {
         this.mch_id = mchId;
     }
