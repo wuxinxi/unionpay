@@ -60,4 +60,14 @@ public interface IManager {
 
     void setTPDU(String var);
 
+
+    String aidIndexList();
+
+    void setAidIndexList(String list);
+
+
+    String publicIndexList();
+
+    void setpublicIndexList(String list);
+
 }

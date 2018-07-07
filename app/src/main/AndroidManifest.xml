@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:name=".UnionPayApp"
         android:theme="@style/AppTheme" >
-        <activity android:name="com.union.DemoActivity" >
+        <activity android:name="com.wxx.test.TestActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

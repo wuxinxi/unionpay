@@ -31,7 +31,7 @@ public class UnionPayApp extends Application {
         MLog.setDebug(true);
 
         posManager = new PosManager();
-        posManager.loadParams(true);
+        posManager.loadParams(false);
 
 
         NoHttp.initialize(InitializationConfig.newBuilder(this)

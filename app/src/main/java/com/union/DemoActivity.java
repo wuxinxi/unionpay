@@ -45,6 +45,11 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
 
         PosManager manager = new PosManager();
         BusllPosManage.init(manager);
+
+        BusllPosManage.getPosManager().setTradeSeq();
+        Iso8583Message message = SignIn.getInstance().message(BusllPosManage.getPosManager().getTradeSeq());
+        socket.exeSSL(ExeType.SIGN, message.getBytes());
+
         ThreadScheduledExecutorUtil.getInstance().getService().scheduleAtFixedRate(new LoopThread(socket), 2000, 200, TimeUnit.MILLISECONDS);
     }
 
