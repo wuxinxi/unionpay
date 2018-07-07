@@ -151,4 +151,24 @@ public class PosManager implements IManager {
     public void setTPDU(String var) {
         this.TPDU = var;
     }
+
+    @Override
+    public String aidIndexList() {
+        return null;
+    }
+
+    @Override
+    public void setAidIndexList(String list) {
+
+    }
+
+    @Override
+    public String publicIndexList() {
+        return null;
+    }
+
+    @Override
+    public void setpublicIndexList(String list) {
+
+    }
 }
