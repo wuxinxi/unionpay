@@ -106,6 +106,16 @@ public class PosManager implements IManager {
     }
 
     @Override
+    public int getTradeSeq() {
+        return 0;
+    }
+
+    @Override
+    public void setTradeSeq() {
+
+    }
+
+    @Override
     public void setBatchNum(String num) {
         this.batchNum = num;
         CommonSharedPreferences.put("batch_num", num);

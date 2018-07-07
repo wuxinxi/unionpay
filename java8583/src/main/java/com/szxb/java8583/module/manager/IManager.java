@@ -7,7 +7,7 @@ package com.szxb.java8583.module.manager;
  * TODO:
  */
 
-public  interface IManager {
+public interface IManager {
 
     void loadFromPrefs();
 
@@ -40,6 +40,10 @@ public  interface IManager {
     String getPosSn();
 
     String getBatchNum();
+
+    int getTradeSeq();
+
+    void setTradeSeq();
 
     //6位
     void setBatchNum(String num);

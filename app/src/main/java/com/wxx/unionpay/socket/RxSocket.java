@@ -108,7 +108,7 @@ public class RxSocket {
 
         InputStream stream = new ByteArrayInputStream(sendData);
         request.setDefineRequestBody(stream, "x-ISO-TPDU/x-auth");
-        SSLContext sslContext = SSLContextUtil.getDefaultSLLContext();
+        SSLContext sslContext = SSLContextUtil.getSSLContext();
         request.setHostnameVerifier(SSLContextUtil.getHostnameVerifier());
         if (sslContext != null) {
             SSLSocketFactory socketFactory = sslContext.getSocketFactory();
