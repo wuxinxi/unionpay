@@ -70,4 +70,8 @@ public interface IManager {
 
     void setpublicIndexList(String list);
 
+    long getLastUpdateTime();
+
+    void setCurrentUpdateTime(long time);
+
 }
