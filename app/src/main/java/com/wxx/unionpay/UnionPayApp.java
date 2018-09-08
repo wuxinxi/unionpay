@@ -29,9 +29,10 @@ public class UnionPayApp extends Application {
         instance = this;
         DBCore.init(this);
         MLog.setDebug(true);
+        MLog.setTag("wuxinxi");
 
         posManager = new PosManager();
-        posManager.loadParams(false);
+        posManager.loadParams(true);
 
 
         NoHttp.initialize(InitializationConfig.newBuilder(this)

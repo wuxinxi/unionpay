@@ -1,5 +1,6 @@
 package com.wxx.test;
 
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import com.szxb.java8583.core.Iso8583MessageFactory;
 import com.szxb.java8583.module.manager.BusllPosManage;
 import com.szxb.java8583.quickstart.SingletonFactory;
 import com.szxb.java8583.quickstart.special.SpecialField62;
+import com.szxb.jni.libszxb;
 import com.union.PosManager;
 import com.wxx.test.module.Down;
 import com.wxx.test.module.Sign;
@@ -23,8 +25,11 @@ import com.wxx.unionpay.interfaces.OnCallback;
 import com.wxx.unionpay.log.MLog;
 import com.wxx.unionpay.socket.RxSocket;
 import com.wxx.unionpay.socket.SocketUtil;
+import com.wxx.unionpay.socket.ThreadScheduledExecutorUtil;
 import com.wxx.unionpay.util.MyToast;
 import com.wxx.unionpay.util.Utils;
+
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -77,11 +82,14 @@ public class TestActivity extends AppCompatActivity implements OnCallback, View.
         public_down.setOnClickListener(this);
         rxButton.setOnClickListener(this);
 
+        AssetManager ass = getApplication().getAssets();
+        libszxb.ymodemUpdate(ass, "Q6_K21_171011110309_anjian.bin");
+
 
         PosManager manager = new PosManager();
         BusllPosManage.init(manager);
 
-//        ThreadScheduledExecutorUtil.getInstance().getService().scheduleAtFixedRate(new LoopThread(rxSocket), 2000, 2000, TimeUnit.MILLISECONDS);
+        ThreadScheduledExecutorUtil.getInstance().getService().scheduleAtFixedRate(new LoopThread(rxSocket), 2000, 2000, TimeUnit.MILLISECONDS);
     }
 
 
@@ -174,14 +182,14 @@ public class TestActivity extends AppCompatActivity implements OnCallback, View.
                 break;
             default:
 //
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        rxSocket.exeSSL(ExeType.SIGN,Sign.getInstance().message().getBytes());
-//                    }
-//                }).start();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        rxSocket.exeSSL(ExeType.SIGN,Sign.getInstance().message().getBytes());
+                    }
+                }).start();
 
-                exe();
+//                exe();
 
                 break;
         }

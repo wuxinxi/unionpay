@@ -67,6 +67,28 @@ public class BaseFactory {
 
 
     /**
+     * @return 退款Factory
+     */
+    public static Iso8583MessageFactory payRefFactory() {
+        Iso8583MessageFactory facotry = new Iso8583MessageFactory(2, false, Charset.forName("UTF-8"), dataHeader());
+        facotry.set(2, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLVAR_NUMERIC, 0))
+                .set(3, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 6))
+                .set(4, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 12))
+                .set(11, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 6))
+                .set(22, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 3))
+                .set(23, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 4))
+                .set(25, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 2))
+                .set(39, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 2))
+                .set(41, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 8))
+                .set(42, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 15))
+                .set(49, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.CHAR, 3))
+                .set(53, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 16))
+                .set(60, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.LLLVAR_NUMERIC, 0))
+                .set(64, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC, 16));
+        return facotry;
+    }
+
+    /**
      * @return 请求头格式
      */
     private static Iso8583DataHeader dataHeader() {

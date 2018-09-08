@@ -10,14 +10,13 @@ import com.szxb.java8583.core.Iso8583Message;
 import com.szxb.java8583.module.SignIn;
 import com.szxb.java8583.module.manager.BusllPosManage;
 import com.wxx.test.ExeType;
-import com.wxx.test.LoopThread;
+import com.wxx.test.module.PosRefund;
 import com.wxx.unionpay.R;
 import com.wxx.unionpay.UnionPayApp;
 import com.wxx.unionpay.log.MLog;
 import com.wxx.unionpay.socket.RxSocket;
-import com.wxx.unionpay.socket.ThreadScheduledExecutorUtil;
 
-import java.util.concurrent.TimeUnit;
+import static com.wxx.test.ExeType.ELSE;
 
 /**
  * 作者：Tangren on 2018-07-05
@@ -50,7 +49,7 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
         Iso8583Message message = SignIn.getInstance().message(BusllPosManage.getPosManager().getTradeSeq());
         socket.exeSSL(ExeType.SIGN, message.getBytes());
 
-        ThreadScheduledExecutorUtil.getInstance().getService().scheduleAtFixedRate(new LoopThread(socket), 2000, 200, TimeUnit.MILLISECONDS);
+//        ThreadScheduledExecutorUtil.getInstance().getService().scheduleAtFixedRate(new LoopThread(socket), 2000, 200, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -63,7 +62,14 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
                 socket.exeSSL(ExeType.SIGN, message.getBytes());
                 break;
             case R.id.rx:
-
+                String cardNo = "6214837838429995";
+                String cardNum = "01";
+                int seq = 123;
+                String batchNum = "000002";
+//                String macKey="9476C162F18CA8C120D3BC2915F0897A";
+                String macKey=BusllPosManage.getPosManager().getMacKey();
+                Iso8583Message messageRef = PosRefund.getInstance().refun(cardNo,cardNum,seq,batchNum,macKey);
+                socket.exeSSL(ELSE, messageRef.getBytes());
                 break;
             default:
 

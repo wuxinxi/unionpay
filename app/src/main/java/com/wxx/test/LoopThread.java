@@ -55,7 +55,7 @@ public class LoopThread extends Thread {
         this.socket = socket;
         init();
         Log.d("LoopThread",
-            "LoopThread(LoopThread.java:58)lallaa");
+                "LoopThread(LoopThread.java:58)lallaa");
     }
 
     @Override
@@ -65,9 +65,7 @@ public class LoopThread extends Thread {
         try {
 
             byte[] cardType = new byte[5];
-//            libszxb.RFID_setAnt(0);
-//
-//            libszxb.RFID_setAnt(1);
+//            -szxb.RFID_setAnt(1);
 
             //寻卡
             String s = libszxb.MifareGetSNR(cardType);
@@ -265,6 +263,9 @@ public class LoopThread extends Thread {
             String cardData = retPassCode.getTAG57();
             String tlv = retPassCode.toString();
 
+            MLog.d("run(LoopThread.java:268) retStr[0])=" + retStr[0]);
+
+
             MLog.d("run(LoopThread.java:233)mainCardNo=" + mainCardNo + ",cardNum=" + cardNum + ",cardData=" + cardData + ",tlv=" + tlv);
 
             MLog.d("run(LoopThread.java:235)mackey=" + UnionPayApp.getPosManager().getMacKey());
@@ -300,14 +301,17 @@ public class LoopThread extends Thread {
         Iso8583MessageFactory factory = SingletonFactory.forQuickStart();
         factory.setSpecialFieldHandle(62, new SpecialField62());
         Iso8583Message message0810 = factory.parse(exe);
-
         String resValue = message0810.getValue(39).getValue();
-        if (resValue.equals("00")) {
-            MyToast.showToast(UnionPayApp.getInstance().getApplicationContext(), "支付成功");
-        } else if (resValue.equals("51")) {
-            MyToast.showToast(UnionPayApp.getInstance().getApplicationContext(), "余额不足");
-        } else {
-            MyToast.showToast(UnionPayApp.getInstance().getApplicationContext(), "错误[" + resValue + "]");
+        switch (resValue) {
+            case "00":
+                MyToast.showToast(UnionPayApp.getInstance().getApplicationContext(), "支付成功");
+                break;
+            case "51":
+                MyToast.showToast(UnionPayApp.getInstance().getApplicationContext(), "余额不足");
+                break;
+            default:
+                MyToast.showToast(UnionPayApp.getInstance().getApplicationContext(), "错误[" + resValue + "]");
+                break;
         }
         MLog.d("run(LoopThread.java:245)" + message0810.toFormatString());
 

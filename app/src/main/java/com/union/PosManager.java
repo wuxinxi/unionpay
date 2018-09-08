@@ -171,4 +171,14 @@ public class PosManager implements IManager {
     public void setpublicIndexList(String list) {
 
     }
+
+    @Override
+    public long getLastUpdateTime() {
+        return 0;
+    }
+
+    @Override
+    public void setCurrentUpdateTime(long l) {
+
+    }
 }

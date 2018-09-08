@@ -122,6 +122,7 @@ public class RxSocket {
                     byte[] bytes = response.get();
                     MLog.d("success(RxSocket.java:113)" + HexUtil.bytesToHexString(bytes));
                     Iso8583Message message0810 = factory.parse(response.get());
+                    MLog.d("success(RxSocket.java:125)"+message0810.toFormatString());
                     Log.d("RxSocket",
                             "success(RxSocket.java:113)" + message0810.toFormatString());
 
