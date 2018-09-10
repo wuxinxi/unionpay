@@ -4,7 +4,7 @@ import com.szxb.java8583.core.Iso8583Message;
 import com.szxb.java8583.module.manager.BusllPosManage;
 import com.szxb.java8583.util.MacEcbUtils;
 
-import static com.szxb.java8583.module.BaseFactory.payBaseFactory;
+import static com.szxb.java8583.module.BaseFactory.payRefFactory;
 import static com.szxb.java8583.util.EncodeUtil.hex2byte;
 import static com.szxb.java8583.util.EncodeUtil.mergeByte;
 import static com.szxb.java8583.util.EncodeUtil.str2Bcd;
@@ -68,7 +68,7 @@ public class PosRefund {
         for (int i = 0; i < 4 - cardNumLen; i++) {
             cardNum = "0" + cardNum;
         }
-        Iso8583Message message = new Iso8583Message(payBaseFactory());
+        Iso8583Message message = new Iso8583Message(payRefFactory());
         message.setMti("0400")
                 .setValue(2, cardNo)//主账号
                 .setValue(3, "000000")//交易处理码
@@ -105,6 +105,8 @@ public class PosRefund {
         byte[] field_60_3 = str2Bcd("000600", 1);
         return mergeByte(field_60_1, field_60_2, field_60_3);
     }
+
+
 
 
 }
