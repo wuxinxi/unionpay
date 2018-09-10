@@ -35,12 +35,12 @@ public class PosRefund {
     }
 
 
-    public Iso8583Message refund(String cardNo, String cardNum, int seq, String batchNum, String reason) {
+    public Iso8583Message refund(String cardNo, String cardNum, int seq, String batchNum, String reason,int refundAmount) {
         int cardNumLen = cardNum.length();
         for (int i = 0; i < 4 - cardNumLen; i++) {
             cardNum = "0" + cardNum;
         }
-        Iso8583Message iso8583Message = payRefundData(cardNo, cardNum, seq, batchNum, reason);
+        Iso8583Message iso8583Message = payRefundData(cardNo, cardNum, seq, batchNum, reason,refundAmount);
 
         byte[] dataAll = iso8583Message.getBytes();
 
@@ -63,7 +63,7 @@ public class PosRefund {
      * @param reason   原因：00
      * @return 退款
      */
-    private Iso8583Message payRefundData(String cardNo, String cardNum, int seq, String batchNum, String reason) {
+    private Iso8583Message payRefundData(String cardNo, String cardNum, int seq, String batchNum, String reason, int refundAmount) {
         int cardNumLen = cardNum.length();
         for (int i = 0; i < 4 - cardNumLen; i++) {
             cardNum = "0" + cardNum;
@@ -72,7 +72,7 @@ public class PosRefund {
         message.setMti("0400")
                 .setValue(2, cardNo)//主账号
                 .setValue(3, "000000")//交易处理码
-                .setValue(4, String.format("%012d", 1))//交易金额
+                .setValue(4, String.format("%012d", refundAmount))//交易金额
                 .setValue(11, String.format("%06d", seq))//受卡方系统跟踪号,流水号
                 .setValue(22, "072")//服务点输入方式码
                 .setValue(23, cardNum)//卡片序列号
@@ -105,8 +105,6 @@ public class PosRefund {
         byte[] field_60_3 = str2Bcd("000600", 1);
         return mergeByte(field_60_1, field_60_2, field_60_3);
     }
-
-
 
 
 }
