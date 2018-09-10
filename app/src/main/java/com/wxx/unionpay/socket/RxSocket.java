@@ -123,8 +123,7 @@ public class RxSocket {
                     MLog.d("success(RxSocket.java:113)" + HexUtil.bytesToHexString(bytes));
                     Iso8583Message message0810 = factory.parse(response.get());
                     MLog.d("success(RxSocket.java:125)"+message0810.toFormatString());
-                    Log.d("RxSocket",
-                            "success(RxSocket.java:113)" + message0810.toFormatString());
+
 
                     if (type == ExeType.SIGN) {
                         String batchNum = message0810.getValue(60).getValue().substring(2, 8);

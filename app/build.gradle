@@ -34,12 +34,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-//    compile project(':java8583')
+    //    compile project(':java8583')
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'com.yanzhenjie.nohttp:okhttp:1.1.10'
-//
-    compile 'com.github.wuxinxi:unionpay:1.0.4'
-
+    //
+    compile project(':java8583')
 }
