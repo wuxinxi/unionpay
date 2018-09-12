@@ -50,5 +50,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="二维码" />
+    <Button
+        android:id="@+id/qr_refund"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="二维码冲正" />
 
 </LinearLayout>

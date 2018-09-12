@@ -62,7 +62,7 @@ public class BankScanPay {
                 .setValue(41, BusllPosManage.getPosManager().getPosSn())
                 .setValue(42, BusllPosManage.getPosManager().getMchId())
                 .setValue(49, "156")//交易货币代码
-                .setValue(53, String.format("%016d", 0))//安全控制信息
+//                .setValue(53, String.format("%016d", 0))//安全控制信息
                 .setValue(59, new String(qr_filed_59(qrCode)))
                 .setValue(60, bytesToHexString(pay_field_60()))
                 .setValue(64, "");

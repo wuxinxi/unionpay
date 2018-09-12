@@ -55,7 +55,6 @@ class QuickStartFactory {
 			   .set(13, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC,4))
 			   .set(14, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC,4))
 			   .set(15, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC,4))
-			   //
 			   .set(22, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC,3).setFillBlankStrategy(Iso8583FillBlankStrategy.rightAppendStrategy('0', false)))
 			   .set(23, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC,4))
 			   .set(25, new Iso8583FieldType(Iso8583FieldType.FieldTypeValue.NUMERIC,2))

@@ -14,7 +14,7 @@ import static com.szxb.java8583.util.MacEcbUtils.bytesToHexString;
  * 作者：Tangren on 2018-06-29
  * 包名：com.wxx.test.module
  * 邮箱：996489865@qq.com
- * TODO:退款
+ * TODO:银联刷卡冲正
  */
 
 public class PosRefund {
@@ -74,7 +74,7 @@ public class PosRefund {
                 .setValue(3, "000000")//交易处理码
                 .setValue(4, String.format("%012d", refundAmount))//交易金额
                 .setValue(11, String.format("%06d", seq))//受卡方系统跟踪号,流水号
-                .setValue(22, "072")//服务点输入方式码
+                .setValue(22, "042")//服务点输入方式码
                 .setValue(23, cardNum)//卡片序列号
                 .setValue(25, "00")//服务点条件码
                 .setValue(39, reason)//冲正原因

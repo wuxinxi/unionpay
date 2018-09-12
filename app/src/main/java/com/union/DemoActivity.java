@@ -12,7 +12,7 @@ import com.szxb.java8583.module.BankScanPay;
 import com.szxb.java8583.module.SignIn;
 import com.szxb.java8583.module.manager.BusllPosManage;
 import com.wxx.test.ExeType;
-import com.wxx.test.module.PosRefund;
+import com.wxx.test.module.PosScanRefund2;
 import com.wxx.unionpay.R;
 import com.wxx.unionpay.UnionPayApp;
 import com.wxx.unionpay.log.MLog;
@@ -31,7 +31,7 @@ import static com.wxx.test.ExeType.ELSE;
 
 public class DemoActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button signButton, payButton, qr;
+    Button signButton, payButton, qr,qr_refund;
     RxSocket socket;
     SocketUtil socketUtil = new SocketUtil();
 
@@ -42,10 +42,12 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
         signButton = (Button) findViewById(R.id.sign);
         payButton = (Button) findViewById(R.id.rx);
         qr = (Button) findViewById(R.id.qr);
+        qr_refund = (Button) findViewById(R.id.qr_refund);
 
         signButton.setOnClickListener(this);
         payButton.setOnClickListener(this);
         qr.setOnClickListener(this);
+        qr_refund.setOnClickListener(this);
 
         socket = new RxSocket();
 
@@ -70,19 +72,32 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
                 socket.exeSSL(ExeType.SIGN, message.getBytes());
                 break;
             case R.id.rx:
-                String cardNo = "6214837838429995";
+                String cardNo = "6217921101024142";
                 String cardNum = "01";
-                int seq = 123;
+                int seq = 45;
                 String batchNum = "000002";
 //                String macKey="9476C162F18CA8C120D3BC2915F0897A";
                 String macKey = BusllPosManage.getPosManager().getMacKey();
-                Iso8583Message messageRef = PosRefund.getInstance().refun(cardNo, cardNum, seq, batchNum, macKey);
-                socket.exeSSL(ELSE, messageRef.getBytes());
+//                String cardNo, String cardNum, int seq, String batchNum, String reason,int refundAmount
+//                Iso8583Message messageRef = PosRefund.getInstance().refund("",seq, batchNum, "00");
+                Iso8583Message refund = com.szxb.java8583.module.PosRefund.getInstance().refund(cardNo, cardNum, seq, batchNum, "00", 1);
+                socket.exeSSL(ELSE, refund.getBytes());
+                break;
+            case R.id.qr_refund:
+
+                String cardNo2="6228450128033376679";
+                int seq_qr_refund=38;
+                String batchNum_qr_refund="000002";
+
+//                Iso8583Message messageRef2 = PosRefund.getInstance()
+//                        .refund(cardNo2,seq_qr_refund,batchNum_qr_refund,"00",1);
+                Iso8583Message refun = PosScanRefund2.getInstance().refun(seq_qr_refund, "6226048465780222686","00",1);
+                socket.exeSSL(ELSE, refun.getBytes());
                 break;
             case R.id.qr:
                 UnionPayApp.getPosManager().setTradeSeq();
 //                Iso8583Message iso8583Message = BankQr.getInstance().qrPayMessage("6223954368418986178");
-                Iso8583Message iso8583Message = BankScanPay.getInstance().qrPayMessage("6223954368418986178", 1, UnionPayApp.getPosManager().getTradeSeq(), UnionPayApp.getPosManager().getMacKey());
+                Iso8583Message iso8583Message = BankScanPay.getInstance().qrPayMessage("6226048465780222686", 1, UnionPayApp.getPosManager().getTradeSeq(), UnionPayApp.getPosManager().getMacKey());
                 Log.d("DemoActivity",
                         "onClick(DemoActivity.java:81)" + iso8583Message.toFormatString());
                 Log.d("DemoActivity",
