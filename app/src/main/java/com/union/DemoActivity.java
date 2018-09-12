@@ -74,7 +74,7 @@ public class DemoActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rx:
                 String cardNo = "6217921101024142";
                 String cardNum = "01";
-                int seq = 45;
+                int seq = 82;
                 String batchNum = "000002";
 //                String macKey="9476C162F18CA8C120D3BC2915F0897A";
                 String macKey = BusllPosManage.getPosManager().getMacKey();
