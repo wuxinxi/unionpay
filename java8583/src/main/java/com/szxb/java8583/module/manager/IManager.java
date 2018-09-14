@@ -45,6 +45,8 @@ public interface IManager {
 
     void setTradeSeq();
 
+    void setTradeSeq(int seq);
+
     //6位
     void setBatchNum(String num);
 
